@@ -1874,22 +1874,24 @@ public class ODatabaseDocumentTx extends OListenerManger<ODatabaseListener> impl
         else if (record instanceof ODocument && ODocumentInternal.getImmutableSchemaClass(((ODocument) record)) != null)
           rid.clusterId = ODocumentInternal.getImmutableSchemaClass(((ODocument) record))
               .getClusterForNewInstance((ODocument) record);
-        if (record instanceof OBlob ) {
-          int clusterId = rid.clusterId;
-          if(clusterId == ORID.CLUSTER_ID_INVALID && storage.isAssigningClusterIds()){
-            clusterId = getClusterIdByName("blob");
-          }
-          if (clusterId != ORID.CLUSTER_ID_INVALID) {
-            Set<Integer> blobClusters = getMetadata().getSchema().getBlobClusters();
-            if (!blobClusters.contains(clusterId) && clusterId != 0) {
-              String iClusterName = getClusterNameById(clusterId);
-              throw new IllegalArgumentException(
-                  "Cluster name '" + iClusterName + "' (id=" + clusterId + ") is not configured to store blobs, valid are "
-                      + blobClusters.toString());
-            }
-            rid.clusterId = clusterId;
-          }
-        }
+        else
+          getDefaultClusterId();
+//        if (record instanceof OBlob ) {
+//          int clusterId = rid.clusterId;
+//          if(clusterId == ORID.CLUSTER_ID_INVALID && storage.isAssigningClusterIds()){
+//            clusterId = getClusterIdByName(OStorage.CLUSTER_DEFAULT_NAME);
+//          }
+//          if (clusterId != ORID.CLUSTER_ID_INVALID) {
+//            Set<Integer> blobClusters = getMetadata().getSchema().getBlobClusters();
+//            if (!blobClusters.contains(clusterId) && clusterId != 0) {
+//              String iClusterName = getClusterNameById(clusterId);
+//              throw new IllegalArgumentException(
+//                  "Cluster name '" + iClusterName + "' (id=" + clusterId + ") is not configured to store blobs, valid are "
+//                      + blobClusters.toString());
+//            }
+//          }
+//        rid.clusterId = clusterId;
+//    }
 
 
       }
@@ -2418,26 +2420,26 @@ public class ODatabaseDocumentTx extends OListenerManger<ODatabaseListener> impl
     checkOpeness();
 
     if (!(iRecord instanceof ODocument)) {
-      int clusterId = iRecord.getIdentity().getClusterId();
-      if (iRecord instanceof OBlob ) {
-        if (clusterId == ORID.CLUSTER_ID_INVALID && iClusterName != null) {
-          clusterId = getClusterIdByName(iClusterName);
-        }
-        if(clusterId == ORID.CLUSTER_ID_INVALID && storage.isAssigningClusterIds()){
-          clusterId = getClusterIdByName("blob");
-        }
-        if (clusterId != ORID.CLUSTER_ID_INVALID) {
-          Set<Integer> blobClusters = getMetadata().getSchema().getBlobClusters();
-          if (!blobClusters.contains(clusterId) && clusterId != 0) {
-            if(iClusterName == null)
-              iClusterName = getClusterNameById(clusterId);
-            throw new IllegalArgumentException(
-                "Cluster name '" + iClusterName + "' (id=" + clusterId + ") is not configured to store blobs, valid are "
-                    + blobClusters.toString());
-          }
-          ((ORecordId) iRecord.getIdentity()).clusterId = clusterId;
-        }
-      }
+//      int clusterId = iRecord.getIdentity().getClusterId();
+//      if (iRecord instanceof OBlob) {
+//        if (clusterId == ORID.CLUSTER_ID_INVALID && iClusterName != null) {
+//          clusterId = getClusterIdByName(iClusterName);
+//        }
+        //        if(clusterId == ORID.CLUSTER_ID_INVALID && storage.isAssigningClusterIds()){
+        //          clusterId = getClusterIdByName(OStorage.CLUSTER_DEFAULT_NAME);
+        //        }
+        //        if (clusterId != ORID.CLUSTER_ID_INVALID) {
+        //          Set<Integer> blobClusters = getMetadata().getSchema().getBlobClusters();
+        //          if (!blobClusters.contains(clusterId) && clusterId != 0) {
+        //            if(iClusterName == null)
+        //              iClusterName = getClusterNameById(clusterId);
+        ////            throw new IllegalArgumentException(
+        //                "Cluster name '" + iClusterName + "' (id=" + clusterId + ") is not configured to store blobs, valid are "
+        //                    + blobClusters.toString());
+        //          }
+        //        }
+//        ((ORecordId) iRecord.getIdentity()).clusterId = clusterId;
+//      }
       return (RET) currentTx.saveRecord(iRecord, iClusterName, iMode, iForceCreate, iRecordCreatedCallback, iRecordUpdatedCallback);
     }
 
