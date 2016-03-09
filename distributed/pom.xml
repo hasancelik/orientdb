@@ -41,6 +41,7 @@
         <jar.manifest.mainclass>com.orientechnologies.orient.server.OServerMain</jar.manifest.mainclass>
         <osgi.import>com.hazelcast.*;resolution:=optional,*</osgi.import>
         <osgi.export>com.orientechnologies.orient.server.hazelcast.*</osgi.export>
+        <hazelcast.version>3.5.3/hazelcast.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <argLine>-ea -Xmx2048m -Dindex.flushAfterCreate=false
             -Dstorage.makeFullCheckpointAfterCreate=false
@@ -121,7 +122,7 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-all</artifactId>
-            <version>3.5.3</version>
+            <version>${hazelcast.version}</version>
         </dependency>
     </dependencies>
 
